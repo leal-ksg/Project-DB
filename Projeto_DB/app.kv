@@ -1,0 +1,498 @@
+ScreenManager: #:kivy!
+    SignUpScreen:
+    LoginScreen:
+    MenuScreen:
+    UserManagementScreen:
+    ReadUserScreen:
+    
+
+<LoginScreen>:
+    MDFloatLayout: #:kivy
+
+    Widget:
+        canvas.before:
+            Color:
+                rgba: 0.356863, 0.447059, 0.392157, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        
+    MDLabel:
+        text: "ERP Tester"
+        theme_text_color: "Custom"
+        text_color: 0.176, 0.224, 0.196, 1
+        font_size: "42sp"
+        pos_hint: {"center_x": 0.8, "center_y": .8}
+        font_name: "src/fonts/Kanit-Regular.ttf"
+        markup: True
+        canvas.before:
+            Color:
+                rgba: 0.51, 0.63, 0.48, 1
+            Line:
+                points: 140,370 , 353, 370
+            Line:
+                points: 150,360 , 343, 360
+                # self.x, self.y - sp(120), self.x + self.width, self.y - sp(120)
+    
+    MDTextField:
+        id: username
+        mode: "rectangle"
+        hint_text: "Username"
+        pos_hint: {"center_x": .5, "center_y": .55}
+        size_hint_x: .6
+        size_hint_y: .12
+        line_color_normal: "#000000"
+        line_color_focus: "#000000"
+        hint_text_color_normal: "#000000"
+        hint_text_color_focus: "#000000"
+        text_color_focus: "##000000"
+        text_color_normal: "#FFFFFF"
+
+    MDTextField:
+        id: password
+        mode: "rectangle"
+        background_color: 0.356863, 0.447059, 0.392157, 1
+        hint_text: "Password"
+        pos_hint: {"center_x": .5, "center_y": .38}
+        size_hint_x: .6
+        size_hint_y: .12
+        line_color_normal: "#000000"
+        line_color_focus: "#000000"
+        hint_text_color_normal: "#000000"
+        hint_text_color_focus: "#000000"
+        text_color_focus: "##000000"
+        text_color_normal: "#FFFFFF"
+        password: "true"
+    
+    MDFlatButton:
+        pos_hint: {"center_x": .5, "center_y": .175}
+        md_bg_color: 0.176, 0.224, 0.196, 1
+        md_bg_color: 0.51, 0.63, 0.48
+        text: "Log in"
+        theme_text_color: "Custom"
+        text_color: 0.25, 0.35, 0.30, 1
+        font_style: "Button"
+        size_hint: .4, .1
+        on_release: app.login()
+
+<SignUpScreen>:
+
+    id: signup_screen
+
+    MDFloatLayout: #:kivy
+    Widget: 
+        canvas.before:
+            Color:
+                rgba: 0.356863, 0.447059, 0.392157, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    MDBoxLayout:
+        orientation: "vertical"
+        
+        MDTopAppBar:
+            md_bg_color: 0.51, 0.63, 0.48
+            elevation: 0
+            title: "Cadastro de usuários"
+            anchor_title: "center"
+            specific_text_color: "black"
+            right_action_items: [["exit-to-app", lambda x: app.return_to_user_management_screen(), "Sair"]]
+
+        MDFloatLayout:
+
+            MDTextField:
+                id: name_sign_up
+                hint_text: "Nome completo"
+                pos_hint: {"center_x": .35, "center_y": .8}
+                size_hint_x: .5
+                size_hint_y: .14
+                line_color_normal: "#000000"
+                line_color_focus: "#000000"
+                hint_text_color_normal: "#000000"
+                hint_text_color_focus: "#000000"
+                text_color_focus: "#000000"
+                text_color_normal: "#FFFFFF"
+                on_text_validate: 
+
+            MDTextField:
+                id: date_of_birth_sign_up
+                hint_text: "Data de nascimento"
+                pos_hint: {"center_x": .75, "center_y": .8}
+                size_hint_x: .2
+                size_hint_y: .14
+                line_color_normal: "#000000"
+                line_color_focus: "#000000"
+                hint_text_color_normal: "#000000"
+                hint_text_color_focus: "#000000"
+                text_color_focus: "#000000"
+                text_color_normal: "#FFFFFF"              
+
+            MDTextField:
+                id: cpf_sign_up
+                hint_text: "CPF"
+                pos_hint: {"center_x": .19, "center_y": .70}
+                size_hint_x: .18
+                size_hint_y: .14
+                line_color_normal: "#000000"
+                line_color_focus: "#000000"
+                hint_text_color_normal: "#000000"
+                hint_text_color_focus: "#000000"
+                text_color_focus: "#000000"
+                text_color_normal: "#FFFFFF"
+
+            MDTextField:
+                id: rg_sign_up
+                hint_text: "RG"
+                pos_hint: {"center_x": .41, "center_y": .70}
+                size_hint_x: .18
+                size_hint_y: .14
+                line_color_normal: "#000000"
+                line_color_focus: "#000000"
+                hint_text_color_normal: "#000000"
+                hint_text_color_focus: "#000000"
+                text_color_focus: "#000000"
+                text_color_normal: "#FFFFFF"
+
+            MDTextField:
+                id: office_sign_up
+                hint_text: "Cargo"
+                pos_hint: {"center_x": .675, "center_y": .70}
+                size_hint_x: .29
+                size_hint_y: .14
+                line_color_normal: "#000000"
+                line_color_focus: "#000000"
+                hint_text_color_normal: "#000000"
+                hint_text_color_focus: "#000000"
+                text_color_focus: "#000000"
+                text_color_normal: "#FFFFFF"
+
+            MDTextField:
+                id: sex_sign_up
+                hint_text: "Sexo"
+                pos_hint: {"center_x": .881, "center_y": .70}
+                size_hint_x: .05
+                size_hint_y: .14
+                line_color_normal: "#000000"
+                line_color_focus: "#000000"
+                hint_text_color_normal: "#000000"
+                hint_text_color_focus: "#000000"
+                text_color_focus: "#000000"
+                text_color_normal: "#FFFFFF"
+
+            MDTextField:
+                id: email_sign_up
+                hint_text: "E-mail"
+                pos_hint: {"center_x": .35, "center_y": .61}
+                size_hint_x: .5
+                size_hint_y: .14
+                line_color_normal: "#000000"
+                line_color_focus: "#000000"
+                hint_text_color_normal: "#000000"
+                hint_text_color_focus: "#000000"
+                text_color_focus: "#000000"
+                text_color_normal: "#FFFFFF"
+
+            MDTextField:
+                id: phone_sign_up
+                hint_text: "Telefone"
+                pos_hint: {"center_x": .772, "center_y": .61}
+                size_hint_x: .25
+                size_hint_y: .14
+                line_color_normal: "#000000"
+                line_color_focus: "#000000"
+                hint_text_color_normal: "#000000"
+                hint_text_color_focus: "#000000"
+                text_color_focus: "#000000"
+                text_color_normal: "#FFFFFF"
+
+            MDTextField:
+                id: first_password_sign_up
+                hint_text: "Senha"
+                max_text_length: 20
+                pos_hint: {"center_x": .5, "center_y": .45}
+                size_hint_x: .4
+                size_hint_y: .14
+                line_color_normal: "#000000"
+                line_color_focus: "#000000"
+                hint_text_color_normal: "#000000"
+                hint_text_color_focus: "#000000"
+                text_color_focus: "#000000"
+                text_color_normal: "#FFFFFF"
+
+            MDTextField:
+                id: second_password_sign_up
+                hint_text: "Confirme a senha"
+                max_text_length: 20
+                pos_hint: {"center_x": .5, "center_y": .34}
+                size_hint_x: .4
+                size_hint_y: .14
+                line_color_normal: "#000000"
+                line_color_focus: "#000000"
+                hint_text_color_normal: "#000000"
+                hint_text_color_focus: "#000000"
+                text_color_focus: "#000000"
+                text_color_normal: "#FFFFFF"
+            
+            MDFlatButton:
+                pos_hint: {"center_x": .5, "center_y": .15}
+                md_bg_color: 0.51, 0.63, 0.48
+                text: "Cadastrar"
+                theme_text_color: "Custom"
+                text_color: "black"
+                font_style: "Button"
+                size_hint: .4, .1
+                on_press: signup_screen.sign_up()
+
+<MenuScreen>:
+    MDFloatLayout: #:kivy 
+    
+    Widget:
+        canvas.before:
+            Color:
+                rgba: 0.356863, 0.447059, 0.392157, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size            
+    
+    MDBoxLayout:
+        orientation: "vertical"
+        
+        MDTopAppBar:
+            
+            md_bg_color: 0.51, 0.63, 0.48
+            elevation: 0
+            title: "Menu principal"
+            anchor_title: "center"
+            specific_text_color: "black"
+            right_action_items: [["exit-to-app", lambda x: app.return_to_login_screen(), "Sair"]]
+
+        GridLayout:
+            
+            cols:3
+            padding: [52,20]
+            spacing: dp(15)
+
+            MDCard:
+                md_bg_color: 0.51, 0.63, 0.48
+                size_hint: None, None
+                size: "120dp", "120dp"
+                on_press: app.go_to_user_management_screen()
+                elevation: 0
+                BoxLayout:
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "Gestão de usuários"
+                        halign: "center"
+                        font_size: "17sp"
+                        font_name: "src/fonts/Kanit-Regular.ttf"
+                    MDIcon:
+                        icon: "account-multiple-outline"
+                        pos_hint: {"center_x": 0.5}
+                        font_size: "37sp"
+            
+            MDCard:
+                md_bg_color: 0.51, 0.63, 0.48
+                size_hint: None, None
+                size: "120dp", "120dp"
+                on_release: app.card_click()
+                elevation: 0
+                BoxLayout:
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "Gestão de produtos"
+                        halign: "center"
+                        font_size: "17sp"
+                        font_name: "src/fonts/Kanit-Regular.ttf"
+                    MDIcon:
+                        icon: "pickaxe"
+                        pos_hint: {"center_x": 0.5}
+                        font_size: "33sp"
+                        padding: [0,0,0,3.5]
+            
+            MDCard:
+                md_bg_color: 0.51, 0.63, 0.48
+                size_hint: None, None
+                size: "120dp", "120dp"
+                on_release: app.card_click()
+                elevation: 0
+                BoxLayout:
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "Consulta de estoque"
+                        halign: "center"
+                        font_size: "17sp"
+                        font_name: "src/fonts/Kanit-Regular.ttf"
+                    MDIcon:
+                        icon: "clipboard-text-search-outline"
+                        pos_hint: {"center_x": 0.5}
+                        font_size: "33sp"
+                        padding: [0,0,0,2.5]
+                
+            MDCard:
+                md_bg_color: 0.51,0.63, 0.48 
+                size_hint: None, None
+                size: "120dp", "120dp"
+                on_release: app.card_click()
+                elevation: 0
+                BoxLayout:
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "Compra de materiais"
+                        halign: "center"
+                        font_size: "17sp"
+                        font_name: "src/fonts/Kanit-Regular.ttf"
+                    MDIcon:
+                        icon: "shopping-outline"
+                        pos_hint: {"center_x": 0.5}
+                        font_size: "35sp"
+                        padding: [0,0,0,2]
+        
+            MDCard:
+                md_bg_color: 0.51, 0.63, 0.48
+                size_hint: None, None
+                size: "120dp", "120dp"
+                on_release: app.card_click()
+                elevation: 0
+                BoxLayout:
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "Separação de pedidos"
+                        halign: "center"
+                        font_size: "17sp"
+                        font_name: "src/fonts/Kanit-Regular.ttf"
+                    MDIcon:
+                        icon: "list-box-outline"
+                        pos_hint: {"center_x": 0.5}
+                        font_size: "35sp"
+                        padding: [0,0,0,2]
+            
+            MDCard:
+                md_bg_color: 0.51, 0.63, 0.48
+                size_hint: None, None
+                size: "120dp", "120dp"
+                on_release: app.card_click()
+                elevation: 0
+                BoxLayout:
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "Cadastro de pedidos"
+                        halign: "center"
+                        font_size: "17sp"
+                        font_name: "src/fonts/Kanit-Regular.ttf"
+                    MDIcon:
+                        icon: "clipboard-plus-outline"
+                        pos_hint: {"center_x": 0.5}
+                        font_size: "33sp"
+                        padding: [0,0,0,2]
+                        
+            MDCard:
+                orientation: 'vertical'
+                md_bg_color: 0.51, 0.63, 0.48
+                size_hint: None, None
+                size: "120dp", "120dp"
+                pos_hint: {"center_x": .2, "center_y": .15}
+                on_release: app.card_click()
+                elevation: 0
+            MDCard:
+                md_bg_color: 0.51, 0.63, 0.48
+                size_hint: None, None
+                size: "120dp", "120dp"
+                on_release: app.card_click()
+                elevation: 0
+            
+            MDCard:
+                md_bg_color: 0.51, 0.63, 0.48
+                size_hint: None, None
+                size: "120dp", "120dp"
+                on_release: app.card_click()
+                elevation: 0
+
+<UserManagementScreen>:
+
+    MDFloatLayout: #:kivy 
+    
+    Widget:
+        canvas.before:
+            Color:
+                rgba: 0.356863, 0.447059, 0.392157, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Gestão de usuários"
+            md_bg_color: 0.51, 0.63, 0.48
+            elevation: 0
+            specific_text_color: "black"
+            right_action_items: [["exit-to-app", lambda x: app.return_to_menu_screen()]]
+
+        MDFloatLayout:
+        
+            MDFlatButton:
+                pos_hint: {"center_x": .5, "center_y": .65}
+                md_bg_color: 0.51, 0.63, 0.48
+                text: "Cadastro"
+                theme_text_color: "Custom"
+                text_color: "black"
+                font_style: "Button"
+                size_hint: .7, .05
+                on_press: app.go_to_sign_up_screen()
+            
+            MDFlatButton:
+                pos_hint: {"center_x": .5, "center_y": .55}
+                md_bg_color: 0.51, 0.63, 0.48
+                text: "Consulta"
+                theme_text_color: "Custom"
+                text_color: "black" 
+                font_style: "Button"
+                size_hint: .7, .05
+                on_press: app.go_to_read_user_screen()
+
+            MDFlatButton:
+                pos_hint: {"center_x": .5, "center_y": .45}
+                md_bg_color: 0.51, 0.63, 0.48
+                text: "Alterações"
+                theme_text_color: "Custom"
+                text_color: "black"
+                font_style: "Button"
+                size_hint: .7, .05
+                on_press: 
+
+            MDFlatButton:
+                pos_hint: {"center_x": .5, "center_y": .35}
+                md_bg_color: 0.51, 0.63, 0.48
+                text: "Exclusão"
+                theme_text_color: "Custom"
+                text_color: "black"
+                font_style: "Button"
+                size_hint: .7, .05
+                on_press: 
+
+<ReadUserScreen>:
+
+    MDFloatLayout: #:kivy 
+    
+    Widget:
+        canvas.before:
+            Color:
+                rgba: 0.356863, 0.447059, 0.392157, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Consulta de usuários"
+            md_bg_color: 0.51, 0.63, 0.48
+            elevation: 0
+            specific_text_color: "black"
+            right_action_items: [["exit-to-app", lambda x: app.return_to_user_management_screen()]]
+        
+        MDLabel:
+

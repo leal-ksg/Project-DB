@@ -136,6 +136,7 @@ class ReadUserScreen(Screen):
             data = db.select_data(query="select ID, name, dob, cpf, rg, office, sex, email, phone from Users")
             print(data)
             self.data_tables = MDDataTable(
+                id="tabela",
                 size_hint=(0.92, 0.8),
                 pos_hint={"center_x":.5},
                 pos=(self.x, 50),
@@ -167,6 +168,55 @@ class ReadUserScreen(Screen):
         def on_enter(self, *args):
             self.create_table()
 
+class DeleteUserScreen(Screen):
+
+    def create_table_checkable(self):
+
+        db = Database()
+        data = db.select_data(query="select ID, name, dob, cpf, rg, office, sex, email, phone from Users")
+        print(data)
+        self.data_tables = MDDataTable(
+            size_hint=(0.92, 0.8),
+            pos_hint={"center_x":.5},
+            pos=(self.x, 50),
+            check=True,
+            elevation=0,
+            background_color=(0.51, 0.63, 0.48, 1),
+            column_data=[
+                ("ID", dp(30)),
+                ("Nome", dp(60)),
+                ("Data Nasc", dp(35)),
+                ("CPF", dp(35)),
+                ("RG", dp(35)),
+                ("Cargo", dp(35)),
+                ("Sexo", dp(35)),
+                ("E-mail", dp(35)),
+                ("Telefone", dp(35)),
+            ],
+            row_data = [
+                tuple(str(value) if value is not None else '-' for value in row)
+                for row in data
+                ]
+            )
+        
+        self.data_tables.bind(on_row_press=self.on_row_press)
+        self.add_widget(self.data_tables)
+    
+    def on_row_press(self, *args):
+        pass
+    
+    def delete_rows_checked(self):
+
+        checked = self.data_tables.get_row_checks()
+        ids = []
+        for data in checked:
+            ids.append(data[0])
+        
+        print[ids]
+
+    def on_enter(self, *args):
+        self.create_table_checkable()
+
 class App(MDApp):
     KV_FILES = ["app.kv"]
     DEBUG = True
@@ -183,12 +233,14 @@ class App(MDApp):
         menu_screen = MenuScreen(name="menu")
         user_management_screen = UserManagementScreen(name="user_management")
         read_user_screen = ReadUserScreen(name="read_user")
+        delete_user_screen = DeleteUserScreen(name="delete_user")
 
         self.sm.add_widget(login_screen)
         self.sm.add_widget(signup_screen)
         self.sm.add_widget(menu_screen)
         self.sm.add_widget(user_management_screen)
         self.sm.add_widget(read_user_screen)
+        self.sm.add_widget(delete_user_screen)
 
         Window.size = (500, 500)
         Window.minimum_width = 500
@@ -200,6 +252,7 @@ class App(MDApp):
         signup_screen.bind(on_pre_enter=self.set_window_size_signup_screen)
         user_management_screen.bind(on_pre_enter=self.set_window_size_user_management_screen)
         read_user_screen.bind(on_pre_enter=self.set_window_size_read_user_screen)
+        delete_user_screen.bind(on_pre_enter=self.set_window_size_delete_user_screen)
 
         self.login_screen = login_screen
 
@@ -218,6 +271,9 @@ class App(MDApp):
         Window.size = (500, 500) # Tamanho desejado para a tela de gestão de usuário
 
     def set_window_size_read_user_screen(self, *args): 
+        Window.size = (1000, 700)
+    
+    def set_window_size_delete_user_screen(self, *args): 
         Window.size = (1000, 700)
 
     def login(self):
@@ -243,6 +299,10 @@ class App(MDApp):
     def go_to_read_user_screen(self):
         self.sm.transition.direction = 'left'
         self.sm.current = 'read_user'
+    
+    def go_to_delete_user_screen(self):
+        self.sm.transition.direction = 'left'
+        self.sm.current = 'delete_user'
 
     def return_to_menu_screen(self):
        self.sm.transition.direction = 'right'

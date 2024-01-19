@@ -1,9 +1,10 @@
 ScreenManager: #:kivy!
-    SignUpScreen:
     LoginScreen:
+    SignUpScreen:
     MenuScreen:
     UserManagementScreen:
     ReadUserScreen:
+    DeleteUserScreen:
     
 
 <LoginScreen>:
@@ -470,7 +471,7 @@ ScreenManager: #:kivy!
                 text_color: "black"
                 font_style: "Button"
                 size_hint: .7, .05
-                on_press: 
+                on_press: app.go_to_delete_user_screen()
 
 <ReadUserScreen>:
 
@@ -496,3 +497,36 @@ ScreenManager: #:kivy!
         
         MDLabel:
 
+<DeleteUserScreen>:
+
+    id: delete_user_screen
+
+    MDFloatLayout: #:kivy 
+    
+    Widget:
+        canvas.before:
+            Color:
+                rgba: 0.356863, 0.447059, 0.392157, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Exclusão de usuários"
+            md_bg_color: 0.51, 0.63, 0.48
+            elevation: 0
+            specific_text_color: "black"
+            right_action_items: [["exit-to-app", lambda x: app.return_to_user_management_screen()]]
+        
+        MDFlatButton:
+            pos_hint: {"center_x": .5, "center_y": .12}
+            md_bg_color: 0.51, 0.63, 0.48
+            text: "Exclusão"
+            theme_text_color: "Custom"
+            text_color: "black"
+            font_style: "Button"
+            size_hint: .3, .05
+            on_press: delete_user_screen.delete_rows_checked()

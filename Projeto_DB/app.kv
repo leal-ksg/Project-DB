@@ -98,7 +98,7 @@ ScreenManager: #:kivy!
             title: "Cadastro de usuários"
             anchor_title: "center"
             specific_text_color: "black"
-            right_action_items: [["exit-to-app", lambda x: app.return_to_user_management_screen(), "Sair"]]
+            right_action_items: [["exit-to-app", lambda x: app.move_to_page('right', 'user_management'), "Sair"]]
 
         MDFloatLayout:
 
@@ -266,7 +266,7 @@ ScreenManager: #:kivy!
             title: "Menu principal"
             anchor_title: "center"
             specific_text_color: "black"
-            right_action_items: [["exit-to-app", lambda x: app.return_to_login_screen(), "Sair"]]
+            right_action_items: [["exit-to-app", lambda x: app.move_to_page('right', 'login'), "Sair"]]
 
         GridLayout:
             
@@ -429,7 +429,7 @@ ScreenManager: #:kivy!
             md_bg_color: 0.51, 0.63, 0.48
             elevation: 0
             specific_text_color: "black"
-            right_action_items: [["exit-to-app", lambda x: app.return_to_menu_screen()]]
+            right_action_items: [["exit-to-app", lambda x: app.move_to_page('right', 'menu')]]
 
         MDFloatLayout:
         
@@ -493,7 +493,7 @@ ScreenManager: #:kivy!
             md_bg_color: 0.51, 0.63, 0.48
             elevation: 0
             specific_text_color: "black"
-            right_action_items: [["exit-to-app", lambda x: app.return_to_user_management_screen()]]
+            right_action_items: [["exit-to-app", lambda x: app.move_to_page('right', 'user_management')]]
         
         MDLabel:
 
@@ -519,7 +519,7 @@ ScreenManager: #:kivy!
             md_bg_color: 0.51, 0.63, 0.48
             elevation: 0
             specific_text_color: "black"
-            right_action_items: [["exit-to-app", lambda x: app.return_to_user_management_screen()]]
+            right_action_items: [["exit-to-app", lambda x: app.move_to_page('right', 'user_management')]]
         
         MDFlatButton:
             pos_hint: {"center_x": .5, "center_y": .12}

@@ -278,7 +278,7 @@ ScreenManager: #:kivy!
                 md_bg_color: 0.51, 0.63, 0.48
                 size_hint: None, None
                 size: "120dp", "120dp"
-                on_press: app.go_to_user_management_screen()
+                on_press: app.move_to_page('left', 'user_management')
                 elevation: 0
                 BoxLayout:
                     orientation: "vertical"
@@ -441,7 +441,7 @@ ScreenManager: #:kivy!
                 text_color: "black"
                 font_style: "Button"
                 size_hint: .7, .05
-                on_press: app.go_to_sign_up_screen()
+                on_press: app.move_to_page('left', 'sign up')
             
             MDFlatButton:
                 pos_hint: {"center_x": .5, "center_y": .55}
@@ -451,7 +451,7 @@ ScreenManager: #:kivy!
                 text_color: "black" 
                 font_style: "Button"
                 size_hint: .7, .05
-                on_press: app.go_to_read_user_screen()
+                on_press: app.move_to_page('left', 'read_user')
 
             MDFlatButton:
                 pos_hint: {"center_x": .5, "center_y": .45}
@@ -471,7 +471,7 @@ ScreenManager: #:kivy!
                 text_color: "black"
                 font_style: "Button"
                 size_hint: .7, .05
-                on_press: app.go_to_delete_user_screen()
+                on_press: app.move_to_page('left', 'delete_user')
 
 <ReadUserScreen>:
 

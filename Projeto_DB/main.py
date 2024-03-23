@@ -15,33 +15,68 @@ from time import sleep
 import pyodbc
 
 class Database():
-    def __init__(self):
-        connection_data = (
-        "Driver={SQL Server};"
-        "Server=MULCPDDT0515\SERVERPROJECTDB;"
-        "Database=bancoprojeto;"
-        )
 
-        connection = pyodbc.connect(connection_data)
+    dialog = None
+    _instance = None
 
-        self.cursor = connection.cursor()
+    def __new__(cls, app):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+        
+    def __init__(self, app):
+        self.app = app
+        try:
+            connection_data = (
+            "Driver={SQL Server};"
+            "Server=DESKTOP-IF23KTH1\SQLEXPRESS;"
+            "Database=bancoprojeto;"
+            )
 
-    def select_data(self, query):
+            connection = pyodbc.connect(connection_data)
+
+            self.cursor = connection.cursor()
+
+        except pyodbc.DatabaseError as FalhaNaConexao:
+            self.show_alert(text="Falha na conexão com o banco de dados.")
+            self.app.stop()
+            
+
+    def consult_data(self, query):
         result = self.cursor.execute(query).fetchall()
         self.cursor.commit()
         return result
     
-    def insert_data(self, query):
+    def manipulate_data(self, query):
         result = self.cursor.execute(query)
         self.cursor.commit()
         return result
+    
+    def show_alert(self, text):
+
+        if not self.dialog:
+            self.dialog = MDDialog(
+                text=text,
+                buttons=[
+                    MDFlatButton(
+                        text="OK",
+                        on_release=self.close_dialog
+                    )
+                ],
+                radius=[20, 7, 20, 7] 
+            )
+            self.dialog.open()
+
+    def close_dialog(self, obj):
+        self.dialog.dismiss()
+        self.dialog = None
     
 class LoginScreen(Screen):
 
     def check_credentials(self):
 
-        db = Database()
-        query_result = db.select_data(f"select * from Users where name = '{self.ids.username.text}'")
+        db = Database(self)
+        query_result = db.consult_data(f"select * from Users where name = '{self.ids.username.text}'")
         
         if query_result and query_result[0][9] == self.ids.password.text:
             return True
@@ -81,7 +116,7 @@ class SignUpScreen(Screen):
             
     def sign_up(self):
 
-        db = Database()
+        db = Database(self)
 
         if (self.ids.name_sign_up.text and 
            self.ids.date_of_birth_sign_up.text and 
@@ -95,11 +130,11 @@ class SignUpScreen(Screen):
            self.ids.second_password_sign_up.text
            ):
 
-            query_result = db.select_data(f"select * from Users where name = '{self.ids.name_sign_up.text}'")
+            query_result = db.consult_data(f"select * from Users where name = '{self.ids.name_sign_up.text}'")
             print(query_result)
             if not query_result:
                 if self.ids.first_password_sign_up.text == self.ids.second_password_sign_up.text:
-                    db.insert_data(f'''insert into Users(name, dob, cpf, rg, office, sex, email, phone, password) 
+                    db.manipulate_data(f'''insert into Users(name, dob, cpf, rg, office, sex, email, phone, password) 
                                     values('{self.ids.name_sign_up.text}', 
                                    '{self.ids.date_of_birth_sign_up.text}',
                                    '{self.ids.cpf_sign_up.text}',
@@ -130,50 +165,50 @@ class UserManagementScreen(Screen):
     pass
 
 class ReadUserScreen(Screen):
-        def create_table(self):
+    def create_table(self):
 
-            db = Database()
-            data = db.select_data(query="select ID, name, dob, cpf, rg, office, sex, email, phone from Users")
-            print(data)
-            self.data_tables = MDDataTable(
-                id="tabela",
-                size_hint=(0.92, 0.8),
-                pos_hint={"center_x":.5},
-                pos=(self.x, 50),
-                elevation=0,
-                background_color=(0.51, 0.63, 0.48, 1),
-                column_data=[
-                    ("ID", dp(10)),
-                    ("Nome", dp(55)),
-                    ("Data Nasc", dp(30)),
-                    ("CPF", dp(30)),
-                    ("RG", dp(30)),
-                    ("Cargo", dp(30)),
-                    ("Sexo", dp(30)),
-                    ("E-mail", dp(30)),
-                    ("Telefone", dp(30)),
-                ],
-                row_data = [
-                    tuple(str(value) if value is not None else '-' for value in row)
-                    for row in data
-                    ]
-                )
-            
-            self.data_tables.bind(on_row_press=self.on_row_press)
-            self.add_widget(self.data_tables)
+        db = Database()
+        data = db.consult_data(query="select ID, name, dob, cpf, rg, office, sex, email, phone from Users")
+        print(data)
+        self.data_tables = MDDataTable(
+            id="tabela",
+            size_hint=(0.92, 0.8),
+            pos_hint={"center_x":.5},
+            pos=(self.x, 50),
+            elevation=0,
+            background_color=(0.51, 0.63, 0.48, 1),
+            column_data=[
+                ("ID", dp(10)),
+                ("Nome", dp(55)),
+                ("Data Nasc", dp(30)),
+                ("CPF", dp(30)),
+                ("RG", dp(30)),
+                ("Cargo", dp(30)),
+                ("Sexo", dp(30)),
+                ("E-mail", dp(30)),
+                ("Telefone", dp(30)),
+            ],
+            row_data = [
+                tuple(str(value) if value is not None else '-' for value in row)
+                for row in data
+                ]
+            )
         
-        def on_row_press(self, *args):
-            pass
+        self.data_tables.bind(on_row_press=self.on_row_press)
+        self.add_widget(self.data_tables)
+    
+    def on_row_press(self, *args):
+        pass
 
-        def on_enter(self, *args):
-            self.create_table()
+    def on_enter(self, *args):
+        self.create_table()
 
 class DeleteUserScreen(Screen):
 
     def create_table_checkable(self):
 
         db = Database()
-        data = db.select_data(query="select ID, name, dob, cpf, rg, office, sex, email, phone from Users")
+        data = db.consult_data(query="select ID, name, dob, cpf, rg, office, sex, email, phone from Users")
         print(data)
         self.data_tables = MDDataTable(
             size_hint=(0.92, 0.8),
@@ -218,14 +253,14 @@ class DeleteUserScreen(Screen):
         self.create_table_checkable()
 
 class App(MDApp):
-    KV_FILES = ["app.kv"]
+    KV_FILES = ["C:\\Users\\kauad\\Documents\\Project-DB\\Projeto_DB\\app.kv"]
     DEBUG = True
     
     def build_app(self):
 
         self.theme_cls.material_style = "M3"
 
-        Builder.load_file("app.kv")
+        Builder.load_file("C:\\Users\\kauad\\Documents\\Project-DB\\Projeto_DB\\app.kv")
 
         self.sm = ScreenManager()
         login_screen = LoginScreen(name="login")
@@ -247,79 +282,27 @@ class App(MDApp):
         Window.minimum_height = 500
         Window.always_on_top = True
 
-        login_screen.bind(on_pre_enter=self.set_window_size_login_screen)
-        menu_screen.bind(on_pre_enter=self.set_window_size_menu_screen)
-        signup_screen.bind(on_pre_enter=self.set_window_size_signup_screen)
-        user_management_screen.bind(on_pre_enter=self.set_window_size_user_management_screen)
-        read_user_screen.bind(on_pre_enter=self.set_window_size_read_user_screen)
-        delete_user_screen.bind(on_pre_enter=self.set_window_size_delete_user_screen)
+        login_screen.bind(on_pre_enter= lambda x: self.set_window_size(500, 500))
+        menu_screen.bind(on_pre_enter= lambda x:self.set_window_size(500, 500))
+        signup_screen.bind(on_pre_enter= lambda x:self.set_window_size(700, 500))
+        user_management_screen.bind(on_pre_enter= lambda x:self.set_window_size(500, 500))
+        read_user_screen.bind(on_pre_enter= lambda x: self.set_window_size(1000, 500))
+        delete_user_screen.bind(on_pre_enter= lambda x:self.set_window_size(1000, 500))
 
         self.login_screen = login_screen
 
         return self.sm
-    
-    def set_window_size_login_screen(self, *args):
-        Window.size = (500, 500)  # Tamanho desejado para a tela de login
-    
-    def set_window_size_menu_screen(self, *args):
-        Window.size = (500, 500)  # Tamanho desejado para a tela de menu
-    
-    def set_window_size_signup_screen(self, *args): 
-        Window.size = (700, 500) # Tamanho desejado para a tela de cadastro de usuário
-    
-    def set_window_size_user_management_screen(self, *args): 
-        Window.size = (500, 500) # Tamanho desejado para a tela de gestão de usuário
 
-    def set_window_size_read_user_screen(self, *args): 
-        Window.size = (1000, 700)
-    
-    def set_window_size_delete_user_screen(self, *args): 
-        Window.size = (1000, 700)
+    def set_window_size(width, length):
+        Window.size = (width, length)
 
     def login(self):
         if self.login_screen.check_credentials():
-            self.go_to_menu_screen()    
-
-    def go_to_menu_screen(self):
-       self.sm.transition.direction = 'left'
-       self.sm.current = 'menu'
-
-    def go_to_sign_up_screen(self):
-        self.sm.transition.direction = 'left'
-        self.sm.current = 'sign up'
-
-    def go_to_login_screen(self):
-        self.sm.transition.direction = 'left'
-        self.sm.current = 'login'
-
-    def go_to_user_management_screen(self):
-        self.sm.transition.direction = 'left'
-        self.sm.current = 'user_management'
+            self.move_to_page('left', 'sign up')  
     
-    def go_to_read_user_screen(self):
-        self.sm.transition.direction = 'left'
-        self.sm.current = 'read_user'
-    
-    def go_to_delete_user_screen(self):
-        self.sm.transition.direction = 'left'
-        self.sm.current = 'delete_user'
-
-    def return_to_menu_screen(self):
-       self.sm.transition.direction = 'right'
-       self.sm.current = 'menu'
-
-    def return_to_sign_up_screen(self):
-        self.sm.transition.direction = 'right'
-        self.sm.current = 'sign up'
-
-    def return_to_login_screen(self):
-        self.sm.transition.direction = 'right'
-        self.sm.current = 'login'
-
-    def return_to_user_management_screen(self):
-        self.sm.transition.direction = 'right'
-        self.sm.current = 'user_management'
-        
+    def move_to_page(self, trans_direction, page):
+        self.sm.transition.direction = trans_direction
+        self.sm.current = page
 
 if __name__ == '__main__':
     App().run()
